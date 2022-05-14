@@ -51,6 +51,10 @@ public class User implements UserDetails { // implements UserDetails from Spring
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
 
+    public User() {
+
+    }
+
     @PrePersist
     protected void onCreate() {
         this.createdDate = LocalDateTime.now();
