@@ -23,7 +23,7 @@ public class JWTTokenProvider {
         User user = (User) authentication.getPrincipal();
         Date now = new Date(System.currentTimeMillis());
         /* date of token's expiry */
-        Date expiryDate = new Date(now.getTime() + SecurityConstants.EXPIRATION_TIME);
+        Date expiryDate = new Date(now.getTime());
 
         /* create claims - object, which transmitted to JWT*/
         String userId = Long.toString(user.getId());
@@ -43,7 +43,7 @@ public class JWTTokenProvider {
                 .compact();
     }
 
-    public boolean validatorToken(String token) {
+    public boolean validateToken(String token) {
         try {
             Jwts.parser()
                     .setSigningKey(SecurityConstants.SECRET)

@@ -29,10 +29,10 @@ public class JWTAuthFilter extends OncePerRequestFilter  {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException   {
+                                    FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = getJWTFromRequest(request);
-            if (StringUtils.hasText(jwt) && jwtTokenProvider.validatorToken(jwt)) {
+            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
                 Long userId = jwtTokenProvider.getUserId(jwt);
                 User userDetails = customUserDetailsService.loadUserById(userId);
 
@@ -54,6 +54,7 @@ public class JWTAuthFilter extends OncePerRequestFilter  {
     /* this method take JWT from request */
     private String getJWTFromRequest(HttpServletRequest request) {
         /* every request to server will be provided JWT from web-server */
+
         String bearToken = request.getHeader(SecurityConstants.HEADER_STRING);
         if (StringUtils.hasText(bearToken) && bearToken.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             return bearToken.split(" ")[1];

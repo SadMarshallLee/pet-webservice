@@ -2,7 +2,8 @@ package com.pet.webservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pet.webservice.entity.enums.ERole;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,7 +14,10 @@ import java.util.*;
 /* create models and dependencies of users, posts, comments and content (image model) between each other */
 /* also create dependencies between server and MySQL DB */
 /* create all getters, setters and entities */
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
 public class User implements UserDetails { // implements UserDetails from Spring Security
     /* for unique generating id */
@@ -25,11 +29,11 @@ public class User implements UserDetails { // implements UserDetails from Spring
     private String name;
     @Column(nullable = false)
     private String lastname;
-    @Column(unique = true, updatable = false)
+    @Column(unique = true, nullable = false)
     private String username;
-    @Column(length = 16)
+    @Column(nullable = false, length = 16)
     private String password;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
     @Column(columnDefinition = "text")
     private String bio;
@@ -43,6 +47,7 @@ public class User implements UserDetails { // implements UserDetails from Spring
 
     /* create dependence between users and posts */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
+    @ToString.Exclude
     private List<Post> posts = new ArrayList<>();
     @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
     @Column(updatable = false)
@@ -50,10 +55,6 @@ public class User implements UserDetails { // implements UserDetails from Spring
 
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
-
-    public User() {
-
-    }
 
     @PrePersist
     protected void onCreate() {
@@ -97,5 +98,18 @@ public class User implements UserDetails { // implements UserDetails from Spring
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

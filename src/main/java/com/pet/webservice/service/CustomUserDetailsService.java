@@ -13,15 +13,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*
+ * @param userRepository create user's repository
+ */
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
-
-    /* create user's repository */
-    private final UserRepository userRepository;
+public record CustomUserDetailsService(UserRepository userRepository) implements UserDetailsService {
 
     @Autowired
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomUserDetailsService {
     }
 
     /* method must return user */

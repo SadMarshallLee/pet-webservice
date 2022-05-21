@@ -15,6 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 /* Optional help avoid a NullPointException (absence of object)
 if someone tries to find user which absence in DB, Optional return Optional object
 with option to try availability object in DB */
+
     Optional<User> findUserByUsername(String username);
 
     Optional<User> findUserByEmail(String email);

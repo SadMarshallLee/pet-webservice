@@ -17,14 +17,18 @@ import java.util.Map;
 public class ResponseErrorValidator {
     public ResponseEntity<Object> mapValidatorService(BindingResult result) {
         /* BindingResult contains info about errors */
+
         if(result.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
+
             if (!CollectionUtils.isEmpty(result.getAllErrors())) {
                 for (ObjectError error : result.getAllErrors()) {
                     errorMap.put(error.getCode(), error.getDefaultMessage());
                 }
             }
+
             /* filed error responsible for LoginRequest attributes, but getAll responsible for Object */
+
             for (FieldError error : result.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
