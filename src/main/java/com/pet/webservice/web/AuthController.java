@@ -55,7 +55,7 @@ public class AuthController {
     /* create endpoint */
     /* when the user is authentication in the same way service give LoginRequest, making validation,
     * if auth hasn't errors, the service generates token and transfer it to client */
-    @PostMapping("" )
+    @PostMapping("/signin")
     public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
                                                    BindingResult bindingResult) {
         ResponseEntity<Object> errors = responseErrorValidator.mapValidatorService(bindingResult);
