@@ -17,20 +17,22 @@ import java.util.stream.Collectors;
  * @param userRepository create user's repository
  */
 @Service
-public record CustomUserDetailsService(UserRepository userRepository) implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
+
+    private final UserRepository userRepository;
 
     @Autowired
-    public CustomUserDetailsService {
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     /* method must return user */
     @Override
     public UserDetails loadUserByUsername(String username) {
-        /* find user by email */
-        User user = userRepository.findUserByEmail(username).
-                orElseThrow(() -> new UsernameNotFoundException("Username not found with username: "
-                        + username));
-        return null;
+        User user = userRepository.findUserByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found with username: " + username));
+
+        return build(user);
     }
 
     public User loadUserById(Long id) {
@@ -38,12 +40,12 @@ public record CustomUserDetailsService(UserRepository userRepository) implements
     }
 
     public static User build(User user) {
-        /* get authorities */
         List<GrantedAuthority> authorities = user.getRole().stream()
                 .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toList());
-        /* return needed user */
-        return new User(user.getId(),
+
+        return new User(
+                user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),

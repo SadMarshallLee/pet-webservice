@@ -13,29 +13,33 @@ import org.springframework.stereotype.Service;
 
 /* service for creating a new user */
 @Service
-public record UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+public class UserService {
     public static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserService {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User createUser(SignupRequest userIn) {
         User user = new User();
-        /* get everything from client request*/
         user.setEmail(userIn.getEmail());
         user.setName(userIn.getFirstname());
         user.setLastname(userIn.getLastname());
         user.setUsername(userIn.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(userIn.getPassword())); // get the pass from client and encode this
+        user.setPassword(passwordEncoder.encode(userIn.getPassword()));
         user.getRole().add(ERole.ROLE_USER);
 
         try {
-            LOG.info("Saving user {}", userIn.getEmail());
+            LOG.info("Saving User {}", userIn.getEmail());
             return userRepository.save(user);
         } catch (Exception e) {
             LOG.error("Error during registration. {}", e.getMessage());
-            throw new UserExistException("The user " + user.getUsername() + " already exist. Please check credentials.");
+            throw new UserExistException("The user " + user.getUsername() + " already exist. Please check credentials");
         }
     }
 }

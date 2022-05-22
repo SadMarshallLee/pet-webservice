@@ -12,13 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /* this service used for validation any errors */
-
 @Service
 public class ResponseErrorValidator {
-    public ResponseEntity<Object> mapValidatorService(BindingResult result) {
-        /* BindingResult contains info about errors */
 
-        if(result.hasErrors()) {
+    public ResponseEntity<Object> mapValidationService(BindingResult result) {
+        /* BindingResult contains info about errors */
+        if (result.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
 
             if (!CollectionUtils.isEmpty(result.getAllErrors())) {
