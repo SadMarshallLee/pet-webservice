@@ -14,11 +14,9 @@ import java.util.*;
 /* create models and dependencies of users, posts, comments and content (image model) between each other */
 /* also create dependencies between server and MySQL DB */
 /* create all getters, setters and entities */
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+
 @Entity
+@Data
 public class User implements UserDetails { // implements UserDetails from Spring Security
     /* for unique generating id */
     @Id
@@ -29,11 +27,11 @@ public class User implements UserDetails { // implements UserDetails from Spring
     private String name;
     @Column(nullable = false)
     private String lastname;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, updatable = false)
     private String username;
-    @Column(nullable = false, length = 16)
+    @Column(length = 16)
     private String password;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String email;
     @Column(columnDefinition = "text")
     private String bio;
@@ -62,6 +60,9 @@ public class User implements UserDetails { // implements UserDetails from Spring
     }
 
     /* Security methods */
+
+    public User() {
+    }
 
     public User(Long id,
                 String username,

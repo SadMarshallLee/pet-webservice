@@ -23,10 +23,10 @@ public class JWTTokenProvider {
         User user = (User) authentication.getPrincipal();
         Date now = new Date(System.currentTimeMillis());
         /* date of token's expiry */
-        Date expiryDate = new Date(now.getTime());
 
         /* create claims - object, which transmitted to JWT*/
         String userId = Long.toString(user.getId());
+
         Map<String, Object> claimsMap = new HashMap<>();
         claimsMap.put("id", userId);
         claimsMap.put("username", user.getEmail());
@@ -38,7 +38,6 @@ public class JWTTokenProvider {
                 .setSubject(userId)
                 .addClaims(claimsMap)
                 .setIssuedAt(now)
-                .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET)
                 .compact();
     }
@@ -59,7 +58,7 @@ public class JWTTokenProvider {
         }
     }
 
-    public Long getUserId(String token) {
+    public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(SecurityConstants.SECRET)
                 .parseClaimsJws(token)
