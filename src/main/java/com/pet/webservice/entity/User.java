@@ -29,7 +29,7 @@ public class User implements UserDetails { // implements UserDetails from Spring
     private String lastname;
     @Column(unique = true, updatable = false)
     private String username;
-    @Column(length = 16)
+    @Column(length = 64)
     private String password;
     @Column(unique = true)
     private String email;
