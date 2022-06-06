@@ -21,10 +21,15 @@ public class Post {
     private String caption;
     private String location;
     private Integer likes;
+    private Integer dislikes;
 
     @Column
     @ElementCollection(targetClass = String.class)
     private Set<String> likedUsers = new HashSet<>();
+    @Column
+    @ElementCollection(targetClass = String.class)
+    private Set<String> dislikedUsers = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     private User user;
