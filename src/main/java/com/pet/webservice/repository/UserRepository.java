@@ -8,7 +8,7 @@ import java.util.Optional;
 
 /* create repositories for any class and using Hibernate for this */
 /* interface extends methods by JpaRepository for work with DB */
-/* create some generics with object type which i wanted to get from DB and id type (Long) */
+/* create some generics with object type which I wanted to get from DB and id type (Long) */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
